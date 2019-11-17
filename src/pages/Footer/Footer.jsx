@@ -9,14 +9,22 @@ export class Footer extends Component {
           <hr />
           <ul className="list-unstyled list-inline text-center">
             <li className="list-inline-item">
-              <h5 className="mb-0">IA&Law</h5>
+              <h5 className="mb-0">O-Cientista</h5>
             </li>
           </ul>
         </div>
 
         <div className="footer-copyright text-center mb-3">
-          © 2019 Data2Learning:
-          <a href="http://www.data2learning.com/"> data2learning.com</a>
+          © 2019 meu github:
+          <a
+            style={{ color: "gray", fontWeight: "bold" }}
+            href="https://github.com/yankelvin"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {" "}
+            github.com/yankelvin
+          </a>
         </div>
       </footer>
     );
