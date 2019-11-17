@@ -3,11 +3,13 @@ import React, { Component } from "react";
 // Utils
 import api from "../../services/api";
 
+// Components
+import { Matrix } from "./components/Matrix";
+
 export class CykParser extends Component {
   constructor(props) {
     super(props);
-    this.state = { palavra: "", gramatica: "" };
-    this.gerarGramatica = this.gerarGramatica.bind(this);
+    this.state = { palavra: "", input: "", gramatica: "", result: [] };
   }
 
   handleChange = event => {
@@ -15,9 +17,9 @@ export class CykParser extends Component {
     // console.log(`${event.target.name}: ${event.target.value}`);
   };
 
-  gerarGramatica = arr => {
-    if (this.state.gramatica) {
-      let gramatica = this.state.gramatica.split("\n");
+  gerarGramatica = async arr => {
+    if (this.state.input) {
+      let gramatica = this.state.input.split("\n");
       const objeto = {};
       let re = new RegExp(/[a-zA-Z]+\s=>/);
       gramatica.forEach(value => {
@@ -30,19 +32,20 @@ export class CykParser extends Component {
         objeto[key] = producao;
       });
 
-      this.setState({ gramatica: objeto });
+      this.state.gramatica = objeto;
     }
   };
 
   parser = async event => {
-    this.gerarGramatica();
-    console.log(this.state.gramatica);
-    // if (this.state.palavra && this.state.gramatica) {
-    //   api.post("cykParser", {
-    //     palavra: this.state.palavra,
-    //     gramatica: this.state.gramatica
-    //   });
-    // }
+    this.gerarGramatica(null);
+    if (this.state.palavra && this.state.gramatica) {
+      const response = await api.post("cykParser", {
+        word: this.state.palavra,
+        grammar: this.state.gramatica
+      });
+
+      this.setState({ result: response.data });
+    }
   };
 
   render() {
@@ -59,7 +62,7 @@ export class CykParser extends Component {
               <div className="col-sm-10" style={{ margin: "0px auto" }}>
                 <textarea
                   type="text"
-                  name="gramatica"
+                  name="input"
                   className="form-control"
                   id="inputGramatica"
                   placeholder="Ex.: &#10;S => A|B|a|b&#10;A => a&#10;B => b"
@@ -94,6 +97,10 @@ export class CykParser extends Component {
             >
               Realizar parser
             </button>
+          </div>
+
+          <div className={this.state.result.length > 0 ? "row" : "d-none"}>
+            <Matrix result={this.state.result}></Matrix>
           </div>
         </div>
       </div>
