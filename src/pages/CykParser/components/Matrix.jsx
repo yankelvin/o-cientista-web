@@ -4,7 +4,7 @@ export class Matrix extends Component {
   render() {
     return (
       <div className="mt-3">
-        <p>Matrix Gerada</p>
+        <p className="font-weight-bold">Matriz Gerada</p>
         <table className="table table-bordered">
           <tbody>
             {this.props.result
@@ -21,17 +21,23 @@ export class Matrix extends Component {
 
           <tfoot>
             <tr className="table-success">
-              {this.props.result
-                .slice(0)
-                .reverse()
-                .map((item, index) => (
-                  <th key={item + index} scope="col">
-                    {index}
-                  </th>
-                ))}
+              {this.props.palavra.split("").map((item, index) => (
+                <th key={item + index} scope="col">
+                  {item}
+                </th>
+              ))}
             </tr>
           </tfoot>
         </table>
+        {this.props.found ? (
+          <p className="font-weight-bold text-success">
+            A palavra pertence a esta gramática!
+          </p>
+        ) : (
+          <p className="font-weight-bold text-danger">
+            A palavra não pertence a esta gramática!
+          </p>
+        )}
       </div>
     );
   }

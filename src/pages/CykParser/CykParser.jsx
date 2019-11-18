@@ -9,7 +9,13 @@ import { Matrix } from "./components/Matrix";
 export class CykParser extends Component {
   constructor(props) {
     super(props);
-    this.state = { palavra: "", input: "", gramatica: "", result: [] };
+    this.state = {
+      palavra: "",
+      input: "",
+      gramatica: "",
+      result: [],
+      found: false
+    };
   }
 
   handleChange = event => {
@@ -45,6 +51,24 @@ export class CykParser extends Component {
       });
 
       this.setState({ result: response.data });
+      this.verificarResult();
+    }
+  };
+
+  verificarResult = e => {
+    if (this.state.result && this.state.gramatica) {
+      let simboloInicial = Object.keys(this.state.gramatica)[0].trim();
+      let topoMatriz = this.state.result[this.state.result.length - 1][0].split(
+        " "
+      );
+      let found = false;
+      topoMatriz.forEach(value => {
+        if (value.trim() === simboloInicial) {
+          found = true;
+        }
+      });
+      console.log(found);
+      this.setState({ found });
     }
   };
 
@@ -56,8 +80,8 @@ export class CykParser extends Component {
 
           <div className="row mt-5">
             <div className="form-group col-md-6 text-center">
-              <label className="pl-3 col-form-label">
-                Insira a gramática no formato do exemplo abaixo
+              <label className="col-form-label font-weight-bold">
+                Insira a gramática normalizada (Chomsky):
               </label>
               <div className="col-sm-10" style={{ margin: "0px auto" }}>
                 <textarea
@@ -66,15 +90,25 @@ export class CykParser extends Component {
                   className="form-control"
                   id="inputGramatica"
                   placeholder="Ex.: &#10;S => A|B|a|b&#10;A => a&#10;B => b"
-                  rows="5"
+                  rows="6"
                   onChange={this.handleChange}
                 />
               </div>
+
+              <button
+                className="btn btn-sm btn-secondary mt-3"
+                onClick={this.parser}
+              >
+                Realizar parser
+              </button>
             </div>
 
             <div className="form-group col-md-6 text-center">
-              <label htmlFor="inputPalavra" className="pl-3 col-form-label">
-                Insira a palavra embaixo:
+              <label
+                htmlFor="inputPalavra"
+                className="col-form-label font-weight-bold"
+              >
+                Insira a palavra:
               </label>
               <div className="col-sm-10" style={{ margin: "0px auto" }}>
                 <input
@@ -89,18 +123,12 @@ export class CykParser extends Component {
             </div>
           </div>
 
-          <div className="row">
-            <button
-              className="btn btn-sm btn-secondary"
-              style={{ marginLeft: "75px" }}
-              onClick={this.parser}
-            >
-              Realizar parser
-            </button>
-          </div>
-
           <div className={this.state.result.length > 0 ? "row" : "d-none"}>
-            <Matrix result={this.state.result}></Matrix>
+            <Matrix
+              result={this.state.result}
+              palavra={this.state.palavra}
+              found={this.state.found}
+            ></Matrix>
           </div>
         </div>
       </div>
