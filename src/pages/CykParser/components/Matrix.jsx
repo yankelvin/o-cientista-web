@@ -31,11 +31,11 @@ export class Matrix extends Component {
         </table>
         {this.props.found ? (
           <p className="font-weight-bold text-success">
-            A palavra pertence a esta gramática!
+            A palavra é reconhecida por esta gramática!
           </p>
         ) : (
           <p className="font-weight-bold text-danger">
-            A palavra não pertence a esta gramática!
+            A palavra não é reconhecida por esta gramática!
           </p>
         )}
       </div>

@@ -5,6 +5,7 @@ import api from "../../services/api";
 
 // Components
 import { Matrix } from "./components/Matrix";
+import { Explicacao } from "./components/Explicacao";
 
 export class CykParser extends Component {
   constructor(props) {
@@ -14,7 +15,8 @@ export class CykParser extends Component {
       input: "",
       gramatica: "",
       result: [],
-      found: false
+      found: false,
+      explicacao: true
     };
   }
 
@@ -72,11 +74,32 @@ export class CykParser extends Component {
     }
   };
 
+  exibirExplicacao = e => {
+    if (this.state.explicacao === true) {
+      this.setState({ explicacao: false });
+    } else {
+      this.setState({ explicacao: true });
+    }
+  };
+
   render() {
     return (
       <div className="container">
-        <div className="mt-5">
+        <div className="mt-4">
           <h4 className="text-center">CYK Parser</h4>
+
+          <div className="text-center">
+            <button
+              className="btn btn-sm btn-secondary mt-3 mb-3"
+              onClick={this.exibirExplicacao}
+            >
+              Exibir/Esconder explicação
+            </button>
+          </div>
+
+          <div className={this.state.explicacao ? "" : "d-none"}>
+            <Explicacao />
+          </div>
 
           <div className="row mt-5">
             <div className="form-group col-md-6 text-center">
